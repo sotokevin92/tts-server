@@ -28,7 +28,12 @@ try {
     voiceId: 'Joanna',
     port: 3000,
     maxQueueSize: 50,
-    eventHooks: {}
+    eventHooks: {},
+    audioPlayer: {
+      // Optional - system will use default player if not specified
+      path: null,
+      args: null
+    }
   };
   console.log('Using default configuration');
 }

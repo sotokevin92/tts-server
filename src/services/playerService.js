@@ -3,8 +3,17 @@ const SpeechClip = require('../models/SpeechClip');
 
 let player;
 try {
-  const sound = require('play-sound')();
-  player = sound;
+  // Initialize with player options
+  const playerOptions = {};
+
+  // Check if specific player is configured
+  if (config.audioPlayer) {
+    // Use specific player path if provided
+    playerOptions.player = config.audioPlayer.path;
+    console.log(`Using custom audio player: ${config.audioPlayer.path}`);
+  }
+
+  player = require('play-sound')(playerOptions);
   console.log('Audio playback module loaded successfully');
 } catch (error) {
   console.error('Audio playback module not available. This module is required for the server to function:', error.message);
@@ -61,8 +70,7 @@ class PlayerService {
   async deleteById(id) {
     if (this.currentlyPlaying && this.currentlyPlaying.id === id) {
       console.log(`Deleting currently playing clip: ${id}, isPaused: ${this.isPaused}`);
-      const result = await this.skip(this.isPaused);
-      return result;
+      return await this.skip(this.isPaused);
     }
 
     const initialLength = this.queue.length;
@@ -295,7 +303,19 @@ class PlayerService {
         this.fs.writeFileSync(filepath, this.currentlyPlaying.audioBuffer);
 
         console.log(`Playing audio file: ${filepath}`);
-        this.audioProcess = player.play(filepath, (err) => {
+
+        // Prepare player options
+        const playOptions = {};
+
+        // Add any player-specific arguments if configured
+        if (this.config.audioPlayer && this.config.audioPlayer.args) {
+          // Add player-specific command line arguments
+          const playerName = this.config.audioPlayer.path.split('/').pop().split('\\').pop();
+          playOptions[playerName] = this.config.audioPlayer.args;
+          console.log(`Using custom arguments for ${playerName}:`, this.config.audioPlayer.args);
+        }
+
+        this.audioProcess = player.play(filepath, playOptions, (err) => {
           if (err) {
             console.error('Error playing audio:', err);
           }

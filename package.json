@@ -1,0 +1,27 @@
+{
+  "name": "tts-server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:speak": "node tests/testSpeak.js",
+    "test:polling": "node tests/testPolling.js",
+    "test:queue": "node tests/testQueue.js",
+    "test:pause-resume": "node tests/testPauseResume.js",
+    "build": "pkg app.js --targets node18-win-x64 --output build/ttsbot.exe"
+  },
+  "keywords": ["tts", "amazon-polly", "speech-synthesis"],
+  "author": "",
+  "license": "ISC",
+  "description": "Standalone Amazon Polly TTS Bot with HTTP API",
+  "dependencies": {
+    "express": "^4.18.2",
+    "@aws-sdk/client-polly": "^3.400.0",
+    "axios": "^1.4.0",
+    "pkg": "^5.8.1",
+    "uuid": "^9.0.0",
+    "play-sound": "^1.1.5",
+    "get-mp3-duration": "^1.0.0"
+  }
+}

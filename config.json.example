@@ -1,0 +1,15 @@
+{
+  "aws": {
+    "accessKeyId": "ACCESS_KEY",
+    "secretAccessKey": "SECRET_KEY",
+    "region": "us-east-1"
+  },
+  "voiceId": "Joanna",
+  "port": 3000,
+  "maxQueueSize": 50,
+  "eventHooks": {
+    "onStart": "http://localhost:4000/hook/start",
+    "onEnd": "http://localhost:4000/hook/end",
+    "onError": "http://localhost:4000/hook/error"
+  }
+}
